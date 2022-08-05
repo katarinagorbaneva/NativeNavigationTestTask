@@ -1,6 +1,6 @@
 import React, { useState, ReactElement, useEffect } from 'react';
 
-import { Box, Image, View, Text } from 'native-base';
+import { Box, Image, View, Text, ScrollView } from 'native-base';
 import { StyleSheet } from 'react-native';
 import moment from 'moment';
 
@@ -11,13 +11,11 @@ import Header from '../components/Header';
 import { apiWrapper, apiUrls } from '../config/api';
 
 // Экран подробной информации по новости
-export default function NewsItemShowScreen ({ route }: { route: any }): ReactElement {
+export default function NewsItemShowScreen ({ id }: { id: number }): ReactElement {
   const [newsItem, setNewsItem] = useState({});
 
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const { id } = route.params;
 
   useEffect(() => {
     fetchNewsItem().then(() => setLoading(false));
@@ -37,7 +35,7 @@ export default function NewsItemShowScreen ({ route }: { route: any }): ReactEle
 
   // Вывод новости
   function _renderNewContent (): ReactElement {
-    const { image_url: imageUrl, title, created_at: createdAt, body } = newsItem;
+    const { image_url: imageUrl, title, created_at: createdAt, short_text: shortText, body } = newsItem;
 
     return (
       <Box flex={1} alignItems="center">
@@ -46,19 +44,21 @@ export default function NewsItemShowScreen ({ route }: { route: any }): ReactEle
           <Text style={[styles.marginForTop, styles.marginForBottom]} bold>{title}</Text>
           <Text style={styles.marginForBottom} fontSize={14}>Дата: {moment(createdAt).format('D MMM YYYY')}</Text>
 
-          <Text fontSize={16}>{body}</Text>
+          <Text fontSize={14} style={styles.marginForBottom}>{shortText}</Text>
+
+          <Text fontSize={14}>{body}</Text>
         </View>
       </Box>
     );
   }
 
   return (
-    <Box flex={1} alignItems="center">
+    <ScrollView style={styles.marginForBottom}>
       <Header />
       {loading && <Throbber />}
       {errors.length > 0 && <AlertComponent errors={errors} setErrors={setErrors} />}
       {newsItem && _renderNewContent()}
-    </Box>
+    </ScrollView>
   );
 }
 

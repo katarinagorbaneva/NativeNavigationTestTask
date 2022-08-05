@@ -2,6 +2,7 @@ import React, { useState, ReactElement } from 'react';
 
 import { Text, Box, Input, Button } from 'native-base';
 import { Keyboard } from 'react-native';
+import { useNavigation } from 'react-native-navigation-hooks';
 
 import { userSlice } from '../redux/reducers/user';
 import { useAppDispatch } from '../hooks/redux';
@@ -21,6 +22,8 @@ export default function LoginScreen(): ReactElement {
   const [errors, setErrors] = useState([]);
 
   const [loading, setLoading] = useState(false);
+
+  const { setStackRoot } = useNavigation();
 
   const { updateUser } = userSlice.actions;
   const dispatch = useAppDispatch();
@@ -47,6 +50,8 @@ export default function LoginScreen(): ReactElement {
       };
 
       dispatch(updateUser({ ...authData, username: data.user.username, avatar_url: data.user.avatar_url }));
+
+      setStackRoot('NewsScreen');
     } else if (data) setErrors(data.errors);
   }
 

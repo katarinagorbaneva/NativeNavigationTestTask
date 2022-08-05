@@ -2,20 +2,21 @@ import React, { ReactElement } from 'react';
 
 import { Text, Card, View, Pressable } from 'native-base';
 import { ImageBackground, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useNavigation } from 'react-native-navigation-hooks';
+import { Navigation } from 'react-native-navigation';
 
 import { NewsProps } from '../types/interfaces';
 
 // Компонент вывода карточки новости
 export default function NewsCard({ item }: { item: NewsProps }): ReactElement {
-  const { navigate } = useNavigation();
+  const { push } = useNavigation();
 
   const { image_url: imageUrl, created_at: createdAt, title, id } = item;
 
   return (
     <Card style={[styles.borderBottom]}>
-      <Pressable onPress={() => navigate('Подробнее о новости', { id })}>
+      <Pressable onPress={() => push('NewsItemShowScreen', { id })}>
         <ImageBackground source={{ uri: imageUrl }} style={styles.newsImageSize}>
           <ImageBackground style={[styles.newsImage, styles.newsImageSize]}>
             <View style={styles.topInfo} />

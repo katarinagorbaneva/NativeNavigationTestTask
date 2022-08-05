@@ -1,15 +1,15 @@
 import React, { ReactElement } from 'react';
 
-import { Text, Card, Box, Image, Button, View } from 'native-base';
+import { Text, Box, Image, Button, View } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'react-native-navigation-hooks';
 
 import { useAppSelector, useAppDispatch } from '../hooks/redux';
 import { userSlice } from '../redux/reducers/user';
 
 // Компонент вывода шапки с пользователем и кнопкой выйти
 export default function Header (): ReactElement {
-  const { navigate } = useNavigation();
+  const { setStackRoot } = useNavigation();
 
   const currentUser = useAppSelector(state => state.currentUser);
 
@@ -19,7 +19,7 @@ export default function Header (): ReactElement {
   // При нажатии на кнопку выйти обновление редукса и переход на главную
   function onClickLogOut (): void {
     dispatch(deleteUser());
-    navigate('Главная');
+    setStackRoot('LoginScreen');
   }
 
   // Вывод даных пользователя
